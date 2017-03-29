@@ -27,7 +27,6 @@ for category in category_ids:
 			start_index=0
 			break
 		for i in range(0,js["results_shown"]):
-			print js["restaurants"][i]["restaurant"]["name"] 
 			 cur.execute('''
                      INSERT INTO RESTAURANTS (res_id,res_name) VALUES (?,?)''',(js["restaurants"][i]["restaurant"]["R"]["res_id"],js["restaurants"][i]["restaurant"]["name"] + ", " + js["restaurants"][i]["restaurant"]["location"]["locality"]))
 			 conn.commit()
