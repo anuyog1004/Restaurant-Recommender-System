@@ -1,17 +1,14 @@
 import requests
-import sqlite3
+import mysql.connector
 import json
 import config
 
-conn=sqlite3.connect('restaurants_data.sqlite')
-conn.text_factory = str
+conn=mysql.connector.connect(user='root',password='mysql',database='restaurants_data')
 cur=conn.cursor()
 
-cur.execute('''
-	CREATE TABLE IF NOT EXISTS RESTAURANTS
-	(res_id TEXT NOT NULL,
-	res_name TEXT NOT NULL )
-	''')
+sql = ("INSERT INTO restaurants "
+               "(res_id,res_name) "
+               "VALUES (%s, %s)")
 
 request_url = "https://developers.zomato.com/api/v2.1/search"
 
@@ -27,9 +24,9 @@ for category in category_ids:
 			start_index=0
 			break
 		for i in range(0,js["results_shown"]):
-			 cur.execute('''
-                     INSERT INTO RESTAURANTS (res_id,res_name) VALUES (?,?)''',(js["restaurants"][i]["restaurant"]["R"]["res_id"],js["restaurants"][i]["restaurant"]["name"] + ", " + js["restaurants"][i]["restaurant"]["location"]["locality"]))
-			 conn.commit()
+			sql_data = (js["restaurants"][i]["restaurant"]["R"]["res_id"],js["restaurants"][i]["restaurant"]["name"] + ", " + js["restaurants"][i]["restaurant"]["location"]["locality"])
+			cur.execute(sql,sql_data)
+			conn.commit()
 
 
 		start_index += js["results_shown"] 
