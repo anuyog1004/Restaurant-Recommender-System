@@ -24,18 +24,17 @@ for category in category_ids:
 			start_index=0
 			break
 		for i in range(0,js["results_shown"]):
+			print js["restaurants"][i]["restaurant"]["R"]["res_id"],js["restaurants"][i]["restaurant"]["name"] + ", " + js["restaurants"][i]["restaurant"]["location"]["locality"]
 			sql_data = (js["restaurants"][i]["restaurant"]["R"]["res_id"],js["restaurants"][i]["restaurant"]["name"] + ", " + js["restaurants"][i]["restaurant"]["location"]["locality"])
-			cur.execute(sql,sql_data)
-			conn.commit()
+			try:
+				cur.execute(sql,sql_data)
+				conn.commit()
+			except:
+				pass
 
 
 		start_index += js["results_shown"] 
 
-		
-# Use following sql to delete duplicate rows
-# --> ALTER TABLE restaurants MODIFY COLUMN id INT auto_increment
-# --> DELETE n1 FROM restaurants n1, restaurants n2 WHERE n1.id > n2.id AND n1.res_id = n2.res_id
-# --> ALTER TABLE restaurants DROP COLUMN id;
 
 
 

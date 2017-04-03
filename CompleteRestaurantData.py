@@ -17,11 +17,18 @@ sql = ("INSERT INTO restaurants_complete "
 cur.execute(query)
 
 for (res_id,res_name) in cur:
-	r = requests.get(request_url + res_id,headers={"user-key":config.API_KEY})
-	js = json.loads(r.content)
-	sql_data = (res_id,res_name,js["url"])
-	cursor.execute(sql,sql_data)
-	conn.commit()
+	try:
+		r = requests.get(request_url + res_id,headers={"user-key":config.API_KEY})
+		js = json.loads(r.content)
+		sql_data = (res_id,res_name,js["url"])
+		print res_id,res_name
+		try:
+			cursor.execute(sql,sql_data)
+			conn.commit()
+		except:
+			pass
+	except:
+		print "Allowed API calls exceeded"
 
 cur.close()
 cursor.close()

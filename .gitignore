@@ -1,2 +1,4 @@
 *.sqlite
 *config.py
+*.csv
+*config.pyc
